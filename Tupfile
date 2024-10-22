@@ -1,0 +1,7 @@
+.gitignore
+: operations.h |> gcc -E %f >%o |> operations.c
+: foreach *.asm |> nasm -f elf64 -o %o %f |> %B.asm.o
+: foreach *.d | operations.c |> dmd -c -of=%o %f |> %B.run.o
+: foreach *.d | operations.c |> dmd -unittest -c -of=%o %f |> %B.test.o
+: *.run.o *.asm.o |> dmd -L=-lgmp -of=%o %f |> run
+: *.test.o *.asm.o |> dmd -L=-lgmp -unittest -of=%o %f |> test
